@@ -20,7 +20,7 @@ debate.addEventListener('click', async () => {
 
   // 1. Show the debate topic & a quick loading status since 8 API calls take ~3-4s
   addMessage('user', `Debate Topic: ${topic}`);
-  addMessage('system', 'Nova and Rex are debating...');
+  addMessage('system', 'Please wait.. Nova and Rex are debating...');
   chatInput.value = '';
   debate.disabled = true;
 
