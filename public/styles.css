@@ -50,3 +50,9 @@ button:active{
     padding: 5px;
     border-radius: 15px;
 }
+label{
+    font-size: 18px;
+    padding: 5px;
+    background: #8292c1;
+    border-radius: 10px;
+}
