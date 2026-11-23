@@ -66,7 +66,50 @@ app.post('/msg', async (req, res) => {
 });
 
 
+app.post('/debate', async (req, res) => {
+  const topic = req.body.topic || 'Tabs vs Spaces in coding';
+  const turns = 10; // Keep low at first so you don't burn through your 8K TPM limit
 
+  // 1. Give each bot its own isolated history and personality
+  const botAHistory = [
+    { role: 'system', content: 'You are Nova, an optimistic . Keep replies to 2 short sentences.' },
+    { role: 'user', content: `Start a debate about: ${topic}` }
+  ];
+
+  const botBHistory = [
+    { role: 'system', content: 'You are Rex, a skeptical. Keep replies to 2 short sentences.' }
+  ];
+
+  const transcript = [];
+
+  // 2. Ping-pong loop between Bot A and Bot B
+  for (let i = 0; i < turns; i++) {
+    // --- Bot A speaks ---
+    const resA = await groq.chat.completions.create({
+      model: 'openai/gpt-oss-20b',
+      messages: botAHistory,
+    });
+    const replyA = resA.choices[0].message.content;
+
+    botAHistory.push({ role: 'assistant', content: replyA });
+    botBHistory.push({ role: 'user', content: replyA }); // Feed Bot A's words to Bot B
+    transcript.push({ speaker: 'Nova', text: replyA });
+
+    // --- Bot B replies ---
+    const resB = await groq.chat.completions.create({
+      model: 'qwen/qwen3.8-27b',
+      messages: botBHistory,
+    });
+    const replyB = resB.choices[0].message.content;
+
+    botBHistory.push({ role: 'assistant', content: replyB });
+    botAHistory.push({ role: 'user', content: replyB }); // Feed Bot B's words back to Bot A
+    transcript.push({ speaker: 'Rex', text: replyB });
+  }
+
+  res.json({ transcript });
+  console.log(transcript);
+});
 
 
 

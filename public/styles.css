@@ -36,14 +36,14 @@ button:active{
     background-color: rgb(21, 21, 46);
 }
 
-.user{
+.user, .rex{
     background: #4f4646;
     width: 50%;
     margin: 10px auto;
     padding: 5px;
     border-radius: 15px;
 }
-.bot{
+.bot, .nova{
    background: #7a7a7a;
     width: 50%;
     margin: 10px auto;
